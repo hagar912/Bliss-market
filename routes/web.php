@@ -1,19 +1,30 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductControl;
+use App\Http\Controllers\CategoryControl;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
 
-Route::get('/', function () {
-    $categories =  DB::table('categories')->get();
-    return view('welcome', ['categories' => $categories]);
-});
+Route::get('/', [HomeController::class, 'index']);
 
-Route::get('/products/{catid?}', function ($catid = null) {
-    if (!empty($catid)) {
-        $products = DB::table('products')->where('category_id', $catid)->get();
-    } else {
-        $products = DB::table(table: 'products')->get();
-    }
-    $categories = DB::table('categories')->get();
-    return view('products', ['products' => $products, 'categories' => $categories]);
-});
+// Make the category ID parameter optional.
+Route::get('/products/{catid?}',[CategoryControl::class, 'getProductsByCategory'])->name('products.byCategory');
+
+Route::get('/category', [CategoryControl::class, 'getAllCategorywithProducts'])->name('categories.withProducts');
+
+Route::get('/addproduct', [ProductControl::class, 'addProductView'])->name('product.add');
+
+Route::get('/editproduct/{id?}',[ProductControl::class, 'editProductView'])->name('product.edit');
+
+Route::get('/removeproduct/{id?}', [ProductControl::class, 'removeProduct'])->name('product.remove');
+
+Route::Post('/storeproduct',[ProductControl::class, 'saveProduct'])->name('product.store');
+
+Route::get('/addreview', [ReviewController::class , 'addReviewView'])->name('review.add');
+
+Route::get('/reviews', [ReviewController::class , 'allReviews'])->name('reviews.all');
+
+Route::post('/storereview', [ReviewController::class , 'storeReview'])->name('review.store');
+
+Route::get('/searchproduct', [ProductControl::class , 'searchProduct'])->name('product.search');

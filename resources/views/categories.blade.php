@@ -1,30 +1,8 @@
 @extends('layouts.master')
-@php
-    $productId = request()->route('catid'); // gets the route parameter
-@endphp
+
 @section('content')
 
-	@if(session('success'))
-		<div class="alert alert-success">
-			{{ session('success') }}
-		</div>
-	@endif
-	<!-- breadcrumb-section -->
-	<div class="breadcrumb-section breadcrumb-bg">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8 offset-lg-2 text-center">
-					<div class="breadcrumb-text">
-						<p>Fresh and Organic</p>
-						<h1>Shop</h1>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end breadcrumb section -->
-	<!-- products -->
-	<div class="product-section mt-150 mb-150">
+    <div class="product-section mt-150 mb-150">
 		<div class="container">
 			<div class="row">
                 <div class="col-md-12">
@@ -80,5 +58,5 @@
 			</div>
 		</div>
 	</div>
-	<!-- end products -->
+
 @endsection

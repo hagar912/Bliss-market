@@ -18,7 +18,7 @@
 								<p class="subtitle">Fresh & Organic</p>
 								<h1>Delicious Seasonal Fruits</h1>
 								<div class="hero-btns">
-									<a href="/products" class="boxed-btn">Fruit Collection</a>
+									<a href="{{route('products.byCategory')}}" class="boxed-btn">Fruit Collection</a>
 									<a href="contact.html" class="bordered-btn">Contact Us</a>
 								</div>
 							</div>
@@ -37,7 +37,7 @@
 								<p class="subtitle">Fresh Everyday</p>
 								<h1>100% Organic Collection</h1>
 								<div class="hero-btns">
-									<a href="/products" class="boxed-btn">Visit Shop</a>
+									<a href="{{route('products.byCategory')}}" class="boxed-btn">Visit Shop</a>
 									<a href="contact.html" class="bordered-btn">Contact Us</a>
 								</div>
 							</div>
@@ -56,7 +56,7 @@
 								<p class="subtitle">Mega Sale Going On!</p>
 								<h1>Get December Discount</h1>
 								<div class="hero-btns">
-									<a href="/products" class="boxed-btn">Visit Shop</a>
+									<a href="{{route('products.byCategory')}}" class="boxed-btn">Visit Shop</a>
 									<a href="contact.html" class="bordered-btn">Contact Us</a>
 								</div>
 							</div>
@@ -114,26 +114,56 @@
 	<div class="product-section mt-150 mb-150">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-8 offset-lg-2 text-center">
-					<div class="section-title">	
-						<h3><span class="orange-text">Our</span> Products</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
-					</div>
-				</div>
+                <div class="col-md-12">
+                    <div class="product-filters">
+                        <ul>
+                            @if (!empty($categories) )
+                                @foreach ($categories as $category)
+                                    @if (!empty($productId) && $productId == $category->id)
+                                        <li class="active" data-filter=".{{ strtolower($category->id) }}">{{ $category->name }}</li>
+                                    @else
+                                        <li data-filter=".{{ strtolower($category->id) }}">{{ $category->name }}</li>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+			<div class="row product-lists">
+                @if (!empty($products))
+                    @foreach ($products as $product)
+                        <div class="col-lg-4 col-md-6 text-center {{ strtolower($product->category_id) }}">
+                            <div class="single-product-item">
+                                <div class="product-image">
+									<a href="/product"><img style="max-height: 15rem;min-height:15rem;" src="{{ filter_var($product->image_path, FILTER_VALIDATE_URL) ? $product->image_path : asset($product->image_path) }}" alt="" style="max-height:250px; min-height: 250px;"></a>
+                                </div>
+                                <h3 style="min-height: 4.5rem">{{ $product->name }}</h3>
+                                <p class="product-price"><span>{{ $product->price }} $ </span></p>
+                                <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+								<p style="margin-top:1rem">
+                                	<a href="{{ route('product.remove', ['id'=>$product->id]) }}" class="cart-btn" style="background-color: #a30000 !important"><i class="fas fa-trash"></i> Remove</a>
+                                	<a href="{{ route('product.edit', ['id'=>$product->id]) }}" class="cart-btn" style="background-color: #007bff !important"><i class="fas fa-edit"></i> Edit</a>
+								</p>
+							</div>
+                        </div>
+                    @endforeach
+                @endif
 			</div>
 
 			<div class="row">
-				@foreach ($categories as $category)
-					<div class="col-lg-4 col-md-6 text-center">
-						<div class="single-product-item">
-							<div class="product-image">
-								<a href="/products/{{ $category->id }}"><img src="{{ $category->imagepath }}" alt="" style="min-height: 250px;max-height:250px"></a>
-							</div>
-							<h3>{{ $category->name }}</h3>
-							<p class="product-price"><span>{{ Str::limit($category->description, 50) }} </span></p>
-						</div>
+				<div class="col-lg-12 text-center">
+					<div class="pagination-wrap">
+						<ul>
+							<li><a href="#">Prev</a></li>
+							<li><a href="#">1</a></li>
+							<li><a class="active" href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">Next</a></li>
+						</ul>
 					</div>
-				@endforeach
+				</div>
 			</div>
 		</div>
 	</div>
@@ -176,49 +206,28 @@
 			<div class="row">
 				<div class="col-lg-10 offset-lg-1 text-center">
 					<div class="testimonial-sliders">
-						<div class="single-testimonial-slider">
-							<div class="client-avater">
-								<img src="{{ asset('assets/img/avaters/avatar1.png') }}" alt="">
-							</div>
-							<div class="client-meta">
-								<h3>Saira Hakim <span>Local shop owner</span></h3>
-								<p class="testimonial-body">
-									" Sed ut perspiciatis unde omnis iste natus error veritatis et  quasi architecto beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium "
-								</p>
-								<div class="last-icon">
-									<i class="fas fa-quote-right"></i>
-								</div>
-							</div>
-						</div>
-						<div class="single-testimonial-slider">
-							<div class="client-avater">
-								<img src="{{ asset('assets/img/avaters/avatar2.png') }}" alt="">
-							</div>
-							<div class="client-meta">
-								<h3>David Niph <span>Local shop owner</span></h3>
-								<p class="testimonial-body">
-									" Sed ut perspiciatis unde omnis iste natus error veritatis et  quasi architecto beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium "
-								</p>
-								<div class="last-icon">
-									<i class="fas fa-quote-right"></i>
-								</div>
-							</div>
-						</div>
-						<div class="single-testimonial-slider">
-							<div class="client-avater">
-								<img src="{{ asset('assets/img/avaters/avatar3.png') }}" alt="">
-							</div>
-							<div class="client-meta">
-								<h3>Jacob Sikim <span>Local shop owner</span></h3>
-								<p class="testimonial-body">
-									" Sed ut perspiciatis unde omnis iste natus error veritatis et  quasi architecto beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium "
-								</p>
-								<div class="last-icon">
-									<i class="fas fa-quote-right"></i>
-								</div>
-							</div>
-						</div>
-					</div>
+                        @if($reviews)
+                            @foreach ($reviews as $review)
+                                <div class="single-testimonial-slider">
+
+                                    <div class="client-avater">
+                                        <img src={{ asset($review->image_path) }} alt="testimonial">
+                                    </div>
+                                    <div class="client-meta">
+                                        <h3>{{ $review->name }} <span>{{ $review->role }}</span></h3>
+                                        <p class="testimonial-body">
+                                            " {{ $review->message }} "
+                                        </p>
+                                        <div class="last-icon">
+                                            <i class="fas fa-quote-right"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <p>No reviews available.</p>
+                        @endif
+                    </div>
 				</div>
 			</div>
 		</div>
